@@ -19,26 +19,60 @@ document.addEventListener('DOMContentLoaded', () => {
             squares[appleIndex].classList.remove('apple')
             clearInterval(interval)
             score = 0
-            //random apple
+            randomApple()
             direction = 1
             scoreDisplay.innerText = score
             intervalTime = 1000
             currentSnake = [2,1,0]
             currentIndex = 0
-            currentSnake.forEach(index => squares.[index].classlist.add('snake'))
+            currentSnake.forEach(index => squares[index].classlist.add('snake'))
             interval = setInterval(moveOutcomes, intervalTime)
         }
 
         //possible outcomes
         function moveOutcomes() {
             //snake hitting wall or self
+            if (
+                (currentSnake[0] + width >= (width * width) && direction === width) ||
+                (currentSnake[0] % width === width -1 && direction === 1) || 
+                (currentSnake[0] % width === 0 && direction === -1) ||
+                (currentSnake[0] - width < 0 && direction === -width) ||
+                squares[currentSnake[0] + direction.classList.contains('snake')] 
+            ) {
+                return clearInterval(interval)
+            }
 
+            const tail = currentSnake.pop()
+            squares[tail].classlist.remove('snake')
+            currentSnake.unshift(currentSnake[0] + direction)
 
             //eating an apple
+            if(squares[currentSnake[0]].classlist.contains('apple')) {
+                squares[currentSnake[0]].classlist.remove('apple')
+                squares[tail].classlist.add('snake')
+                currentSnake.push(tail)
+                randomApple()
+                score++
+                scoreDisplay.textContent = score
+                clearInterval(interval)
+                intervalTime = intervalTime * speed
+                interval = setInterval(moveOutcomes, intervalTime)
+                }
+                squares[currentSnake[0]].classlist.add('snake')
+            }
 
 
 
+            //random apple
+        function randomApple() {
+            do{
+                appleIndex = Math.floor(Math.random() * squares.length)
+            } while(squares[appleIndex].classlist.contains('snake'))
+            squares[appleIndex].classlist.add('apple')
         }
+
+        
+
         function control(e) {
             squares[currentIndex].classList.remove('snake')
 
@@ -54,5 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         document.addEventListener('keyup', control)
+        startBtn.addEventListener('click', startGame)
 
 })
+
+

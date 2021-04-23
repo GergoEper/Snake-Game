@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // start and restart
         function startGame() {
-            currentSnake.forEach(index => squares[index].classlist.remove('snake'))
+            currentSnake.forEach(index => squares[index].classList.remove('snake'))
             squares[appleIndex].classList.remove('apple')
             clearInterval(interval)
             score = 0
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             intervalTime = 1000
             currentSnake = [2,1,0]
             currentIndex = 0
-            currentSnake.forEach(index => squares[index].classlist.add('snake'))
+            currentSnake.forEach(index => squares[index].classList.add('snake'))
             interval = setInterval(moveOutcomes, intervalTime)
         }
 
@@ -37,19 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 (currentSnake[0] % width === width -1 && direction === 1) || 
                 (currentSnake[0] % width === 0 && direction === -1) ||
                 (currentSnake[0] - width < 0 && direction === -width) ||
-                squares[currentSnake[0] + direction.classList.contains('snake')] 
+                squares[currentSnake[0] + direction].classList.contains('snake')
             ) {
                 return clearInterval(interval)
             }
 
             const tail = currentSnake.pop()
-            squares[tail].classlist.remove('snake')
+            squares[tail].classList.remove('snake')
             currentSnake.unshift(currentSnake[0] + direction)
 
             //eating an apple
-            if(squares[currentSnake[0]].classlist.contains('apple')) {
-                squares[currentSnake[0]].classlist.remove('apple')
-                squares[tail].classlist.add('snake')
+            if(squares[currentSnake[0]].classList.contains('apple')) {
+                squares[currentSnake[0]].classList.remove('apple')
+                squares[tail].classList.add('snake')
                 currentSnake.push(tail)
                 randomApple()
                 score++
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 intervalTime = intervalTime * speed
                 interval = setInterval(moveOutcomes, intervalTime)
                 }
-                squares[currentSnake[0]].classlist.add('snake')
+                squares[currentSnake[0]].classList.add('snake')
             }
 
 
@@ -67,8 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
         function randomApple() {
             do{
                 appleIndex = Math.floor(Math.random() * squares.length)
-            } while(squares[appleIndex].classlist.contains('snake'))
-            squares[appleIndex].classlist.add('apple')
+            } while(squares[appleIndex].classList.contains('snake'))
+            squares[appleIndex].classList.add('apple')
         }
 
         
